@@ -1,0 +1,4 @@
+openssl-dev
+libtool
+netaddr
+sudo pip3 install --upgrade .

@@ -54,11 +54,24 @@ def get_arg_parser():
         dest="output_file",
         help="output file to save the captured data (CSV format)"
     )
+    arg_parser.add_argument(
+        "--threshold",
+        dest="threshold",
+        help="set the threshold for minimum dbm signal to report"
+    )
+    arg_parser.add_argument(
+        "--alert_macs",
+        dest="alert_macs",
+        help="file with list of MAC addresses to alert on. Ignores possible threshold."
+    )
+
+
     arg_parser.add_argument("--version", action="version", version=VERSION)
     arg_parser.set_defaults(debug=False)
     arg_parser.set_defaults(fake=False)
     arg_parser.set_defaults(ignore_case=False)
     arg_parser.set_defaults(mode=Mode.RAW)
+    arg_parser.set_defaults(threshold=-99)
 
     essid_arguments = arg_parser.add_mutually_exclusive_group()
     essid_arguments.add_argument(
@@ -104,6 +117,13 @@ def main():
     if not geteuid() == 0:
         sys_exit("[!] You must be root")
 
+    if (config.alert_macs):
+        filename = config.alert_macs
+        with open(filename) as f:
+            alert_macs = f.readlines()
+            alert_macs = [x.strip() for x in alert_macs]
+        config.alert_macs = alert_macs
+
     # Default mode.
     if config.mode == Mode.RAW:
         from time import sleep
@@ -111,6 +131,8 @@ def main():
 
         try:
             print("[*] Start sniffing probe requests...")
+            if (config.threshold != -99):
+                print("[-] Threshold filter active at ", config.threshold, "dBm")
             raw_viewer = RawProbeRequestViewer(config)
             raw_viewer.start()
 

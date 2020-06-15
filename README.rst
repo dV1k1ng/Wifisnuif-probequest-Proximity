@@ -15,6 +15,11 @@ paper <https://brambonne.com/docs/bonne14sasquatch.pdf>`__.
    :target: https://asciinema.org/a/205172
    :alt: ProbeQuest - Demo
 
+WifiSnuif
+===============
+sudo probequest -i ${monitor} -o ${outfile} --threshold -{appropriate-threshold} --alert_macs /opt/WifiSnuif/in/alert-macs.txt --exclude ${MAC1} ${MAC2} 
+
+
 Installation
 ============
 

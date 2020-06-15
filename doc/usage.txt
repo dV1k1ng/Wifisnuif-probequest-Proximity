@@ -1,0 +1,5 @@
+sudo probequest -i ${monitor} -o ${outfile} --threshold -{appropriate-threshold} --alert_macs /opt/WifiSnuif/in/alert-macs.txt --exclude ${MAC1} ${MAC2} 
+
+get unique AP's from output: cat ./out/20200223-3.txt | cut -d";" -f5 | sort | uniq
+sort and unique output on seen dbm: cat ./out/20200223-3.txt | cut -d";" -f4 | sort | uniq
+

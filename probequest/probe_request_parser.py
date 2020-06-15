@@ -81,8 +81,9 @@ class ProbeRequestParser(Thread):
                 timestamp = packet.getlayer(RadioTap).time
                 s_mac = packet.getlayer(RadioTap).addr2
                 essid = packet.getlayer(Dot11ProbeReq).info.decode("utf-8")
-
-                return ProbeRequest(timestamp, s_mac, essid)
+		# add signal strength
+                dbm = packet.getlayer(RadioTap).dBm_AntSignal
+                return ProbeRequest(timestamp, s_mac, essid, dbm)
 
             return None
         except UnicodeDecodeError:

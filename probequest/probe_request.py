@@ -11,22 +11,25 @@ class ProbeRequest:
     Probe request class.
     """
 
-    def __init__(self, timestamp, s_mac, essid):
+    # add signal strength
+    def __init__(self, timestamp, s_mac, essid, dbm):
         self.timestamp = timestamp
         self.s_mac = str(s_mac)
         self.essid = str(essid)
+        self.dbm = str(dbm)
 
         self.s_mac_oui = self.get_mac_organisation()
 
     def __str__(self):
-        return "{timestamp} - {s_mac} ({mac_org}) -> {essid}".format(
+        return "{timestamp} - {s_mac} ({mac_org}) - {dbm}(dbm) -> {essid}".format(
             timestamp=strftime(
                 "%a, %d %b %Y %H:%M:%S %Z",
                 localtime(self.timestamp)
             ),
             s_mac=self.s_mac,
             mac_org=self.s_mac_oui,
-            essid=self.essid
+            essid=self.essid,
+            dbm=self.dbm
         )
 
     def get_mac_organisation(self):

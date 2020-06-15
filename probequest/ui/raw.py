@@ -6,7 +6,7 @@ Raw probe request viewer.
 """
 
 from probequest.probe_request_sniffer import ProbeRequestSniffer
-
+from time import localtime, strftime
 
 class RawProbeRequestViewer:
     """
@@ -15,6 +15,8 @@ class RawProbeRequestViewer:
 
     def __init__(self, config):
         self.output = config.output_file
+        self.threshold = config.threshold
+        self.alert_macs = config.alert_macs
 
         if self.output is not None:
             from csv import writer
@@ -23,16 +25,25 @@ class RawProbeRequestViewer:
 
             def write_csv(probe_req):
                 outfile.writerow([
-                    probe_req.timestamp,
+                    # probe_req.timestamp,
+                    strftime("%a, %d %b %Y %H:%M:%S %Z", localtime(probe_req.timestamp)),
                     probe_req.s_mac,
                     probe_req.s_mac_oui,
+                    probe_req.dbm,
                     probe_req.essid
                 ])
         else:
             write_csv = lambda *args: None  # noqa: E731
 
         def display_probe_req(probe_req):
-            print(probe_req)
+            if (probe_req.s_mac in self.alert_macs):
+                print("*** Alert *** ", probe_req)
+            else:
+                if (self.threshold != -99):
+                    if (probe_req.dbm <= self.threshold):
+                        print("--- Close --- ", probe_req)
+                else:
+                    print(probe_req)
 
         config.display_func = display_probe_req
         config.storage_func = write_csv
