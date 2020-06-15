@@ -17,6 +17,13 @@ paper <https://brambonne.com/docs/bonne14sasquatch.pdf>`__.
 
 WifiSnuif
 ===============
+
+Based on publicly announced WiFi signals, WifiSnuif upgrades the functionality so you can monitor for nearby and unfamiliar signals. This tool is based on 'probequest' from SkypLabs, and has been enhanced to:
+- read the signal strength;
+- filter on a signal strength threshold;
+- recognize known (trusted) devices
+- alert on previously identified (untrusted) devices (like re-visiting burglers).
+
 sudo probequest -i ${monitor} -o ${outfile} --threshold -{appropriate-threshold} --alert_macs /opt/WifiSnuif/in/alert-macs.txt --exclude ${MAC1} ${MAC2} 
 
 
